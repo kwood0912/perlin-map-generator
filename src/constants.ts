@@ -1,0 +1,20 @@
+export const WATER = 630;
+export const SHALLOW = WATER + 5;
+export const SHALLOWER = SHALLOW + 8;
+export const SHALLOWEST = SHALLOWER + 8;
+export const SAND = SHALLOWEST + 15;
+export const LIGHT_GRASS = SAND + 20;
+
+export const water = "#42ACAF";
+export const shallow = "#4EBCB9";
+export const shallowest_sand = "#77C0B4";
+export const shallowest_tundra = "#94D6CF";
+export const shallower_sand = "#B1C9A7";
+export const shallower_tundra = "#BEECE3";
+export const sand = "#E7D593";
+export const desert = "#E8CE74";
+export const snow = "#F7FFFF";
+export const lightGrass_warm = "#C3D657";
+export const lightGrass_cool = "#7FE19B";
+export const grass_warm = "#B1D354";
+export const grass_cool = "#69CA97";
