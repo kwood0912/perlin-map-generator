@@ -23,19 +23,17 @@ export const generateBinaryFile = (noiseGrid: number[][], fileName = "world.bin"
 };
 
 const colorToTileMap: Record<string, number> = {
-  X42ACAF: 9, // deepest water
-  X4EBCB9: 8, // shallow water
-  XB1C9A7: 6, // shallowest sand
-  X77C0B4: 7, // shallower sand
-  XBEECE3: 14, // shallowest tundra
-  X94D6CF: 15, // shallower tundra
-  XE7D593: 5, // sand
-  XE8CE74: 26, // desert
-  XF7FFFF: 13, // snow tundra
-  XC3D657: 1, // light grass
-  XB1D354: 2, // grass
-  X7FE19B: 10, // light alpine grass
-  X69CA97: 11, // alpine grass
+  X3C5E8B: 0, // deepest water
+  X4F8FBA: 1, // shallow water
+  X73BED3: 2, // shallower water
+  XD0DA91: 3, // shallowest sand
+  XC8E6E6: 4, // shallowest tundra
+  XE8C170: 5, // sand
+  XEBEDE9: 6, // snow tundra
+  XA8CA58: 7, // light grass
+  X75A743: 8, // grass
+  X468232: 9, // light alpine grass
+  X25562E: 10, // alpine grass
 };
 
 // Convert RGB to hex string (e.g. 66CCFF → "X66CCFF")
