@@ -1,15 +1,15 @@
 export const generateBinaryFile = (noiseGrid: number[][], fileName = "world.bin") => {
   const rows = noiseGrid.length;
   const cols = noiseGrid[0].length;
-  const buffer = new ArrayBuffer(rows * cols * 2);
+  const buffer = new ArrayBuffer(rows * cols);
   const view = new DataView(buffer);
 
   let offset = 0;
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
-      const value = Math.max(0, Math.min(65535, Math.round(noiseGrid[y][x]))); // clamp just in case
-      view.setUint16(offset, value, true); // true = little-endian
-      offset += 2;
+      const value = Math.max(0, Math.min(255, Math.round(noiseGrid[y][x]))); // clamp just in case
+      view.setUint8(offset, value);
+      offset += 1;
     }
   }
 
@@ -28,12 +28,14 @@ const colorToTileMap: Record<string, number> = {
   X73BED3: 2, // shallower water
   XD0DA91: 3, // shallowest sand
   XC8E6E6: 4, // shallowest tundra
-  XE8C170: 5, // sand
-  XEBEDE9: 6, // snow tundra
-  XA8CA58: 7, // light grass
-  X75A743: 8, // grass
-  X468232: 9, // light alpine grass
-  X25562E: 10, // alpine grass
+  XF4CB76: 5, // warm sand
+  XE8C170: 6, // cool sand
+  XF5CB76: 7, // desert
+  XEBEDE9: 8, // snow tundra
+  XA8CA58: 9, // light warm grass
+  X75A743: 10, // warm grass
+  X468232: 11, // light cool grass
+  X25562E: 12, // cool grass
 };
 
 // Convert RGB to hex string (e.g. 66CCFF → "X66CCFF")
@@ -45,7 +47,10 @@ function rgbToHex(r: number, g: number, b: number): string {
 function colorToTileIndex(r: number, g: number, b: number): number {
   const hex = rgbToHex(r, g, b);
   const tileIndex = colorToTileMap[hex];
-  return tileIndex !== undefined ? tileIndex : -1;
+  if (tileIndex === undefined) {
+    console.warn(`Color ${hex} not found in tile map, returning default index 0.`);
+  }
+  return tileIndex !== undefined ? tileIndex : 0;
 }
 
 // Main export function

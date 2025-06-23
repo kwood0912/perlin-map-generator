@@ -12,7 +12,8 @@ const {
   shallowest_sand,
   shallowest_tundra,
   shallower,
-  sand,
+  sand_warm,
+  sand_cool,
   desert,
   snow,
   lightGrass_warm,
@@ -111,8 +112,10 @@ export const drawIslands = (
         } else if (c <= SAND) {
           if (midY < 400 || midY > 1600) {
             ctx.fillStyle = snow;
+          } else if (midY < 600 || midY > 1400) {
+            ctx.fillStyle = sand_cool;
           } else {
-            ctx.fillStyle = sand;
+            ctx.fillStyle = sand_warm; // desert is same as warm sand
           }
         } else if (c <= LIGHT_GRASS) {
           if (midY < 400 || midY > 1600) {
@@ -122,7 +125,7 @@ export const drawIslands = (
           } else if (midY < 800 || midY > 1200) {
             ctx.fillStyle = lightGrass_warm;
           } else {
-            ctx.fillStyle = sand;
+            ctx.fillStyle = desert; // desert is same as warm sand
           }
         } else {
           if (midY < 400 || midY > 1600) {
