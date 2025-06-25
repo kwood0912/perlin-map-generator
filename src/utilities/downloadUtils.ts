@@ -26,16 +26,17 @@ const colorToTileMap: Record<string, number> = {
   X3C5E8B: 0, // deepest water
   X4F8FBA: 1, // shallow water
   X73BED3: 2, // shallower water
-  XD0DA91: 3, // shallowest sand
-  XC8E6E6: 4, // shallowest tundra
-  XF4CB76: 5, // warm sand
-  XE8C170: 6, // cool sand
-  XF5CB76: 7, // desert
-  XEBEDE9: 8, // snow tundra
-  XA8CA58: 9, // light warm grass
-  X75A743: 10, // warm grass
-  X468232: 11, // light cool grass
-  X25562E: 12, // cool grass
+  X73BED4: 3, // shallower tundra
+  XD0DA91: 4, // shallowest sand
+  XC8E6E6: 5, // shallowest tundra
+  XF4CB76: 6, // warm sand
+  XE8C170: 7, // cool sand
+  XF5CB76: 8, // desert
+  XEBEDE9: 9, // snow tundra
+  XA8CA58: 10, // light warm grass
+  X75A743: 11, // warm grass
+  X468232: 12, // light cool grass
+  X25562E: 13, // cool grass
 };
 
 // Convert RGB to hex string (e.g. 66CCFF → "X66CCFF")

@@ -7,7 +7,8 @@ export const LIGHT_GRASS = SAND + 20;
 
 export const water = "#3C5E8B";
 export const shallow = "#4F8FBA";
-export const shallower = "#73BED3";
+export const shallower_sand = "#73BED3";
+export const shallower_tundra = "#73BED4";
 export const shallowest_sand = "#D0DA91";
 export const shallowest_tundra = "#C8E6E6";
 export const sand_warm = "#F4CB76";

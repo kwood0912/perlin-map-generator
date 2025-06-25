@@ -11,7 +11,8 @@ const {
   shallow,
   shallowest_sand,
   shallowest_tundra,
-  shallower,
+  shallower_sand,
+  shallower_tundra,
   sand_warm,
   sand_cool,
   desert,
@@ -102,7 +103,11 @@ export const drawIslands = (
         } else if (c <= SHALLOW) {
           ctx.fillStyle = shallow;
         } else if (c <= SHALLOWER) {
-          ctx.fillStyle = shallower;
+          if (midY < 400 || midY > 1600) {
+            ctx.fillStyle = shallower_tundra;
+          } else {
+            ctx.fillStyle = shallower_sand;
+          }
         } else if (c <= SHALLOWEST) {
           if (midY < 400 || midY > 1600) {
             ctx.fillStyle = shallowest_tundra;
