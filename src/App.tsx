@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import PerlinNoise from './classes/PerlinNoise';
 import * as constants from './constants';
-import { drawIslands, findIslands } from './utilities/islandUtils';
+import { drawIslands, findIslands, scrubIslandFragments } from './utilities/islandUtils';
 import { ConfigForm } from './components/ConfigForm';
 import { downloadCanvasAsBinary } from './utilities/downloadUtils';
 
@@ -47,8 +47,9 @@ function App() {
         px = 0;
         py++;
       }
-      const islands = findIslands(noiseGrid.current, mapSize);
+      const { islands, islandsFragments } = findIslands(noiseGrid.current, mapSize);
       drawIslands(context, islands, noiseGrid.current);
+      scrubIslandFragments(context, islands, islandsFragments);
     }
   }, [context, mapSize, frequency, perlin]);
 

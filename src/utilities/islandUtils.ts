@@ -27,6 +27,8 @@ export type Island = {
   minY: number;
   maxX: number;
   maxY: number;
+  elevationX: number;
+  elevationY: number;
   elevation: number;
 }
 
@@ -37,16 +39,19 @@ const isIslandWithinMargin = (island: Island, mapSize: number): boolean => {
   return true;
 }
 
-export const findIslands = (grid: number[][], mapSize: number): Island[] => {
+export const findIslands = (grid: number[][], mapSize: number) => {
   const visited = new Set();
   const islands = [];
+  const islandsFragments = [];
 
-  const getIslandBoundsAndElevation = (startX: number, startY: number) => {
+  const getIslandBoundsAndElevation = (startX: number, startY: number): Island => {
     const stack = [[startX, startY]];
     let minX = Infinity;
     let minY = Infinity;
     let maxX = -Infinity;
     let maxY = -Infinity;
+    let elevationX = startX;
+    let elevationY = startY;
     let elevation = 0;
 
     while (stack.length > 0) {
@@ -63,14 +68,18 @@ export const findIslands = (grid: number[][], mapSize: number): Island[] => {
         minY = Math.min(minY, y);
         maxX = Math.max(maxX, x);
         maxY = Math.max(maxY, y);
-        elevation = Math.max(elevation, grid[y][x]);
+        if (grid[y][x] > elevation) {
+          elevation = grid[y][x];
+          elevationX = x;
+          elevationY = y;
+        }
         stack.push([x + 1, y]);
         stack.push([x - 1, y]);
         stack.push([x, y + 1]);
         stack.push([x, y - 1]);
       }
     }
-    return { minX, minY, maxX, maxY, elevation };
+    return { minX, minY, maxX, maxY, elevation, elevationX, elevationY };
   }
 
   for (let y = 0; y < mapSize; y++) {
@@ -80,12 +89,19 @@ export const findIslands = (grid: number[][], mapSize: number): Island[] => {
         // only consider islands within the bounds of the canvas
         if (isIslandWithinMargin(island, mapSize)) {
           islands.push(island);
+        } else {
+          // use nearest neighbor to remove any island fragments that are too close to the edge
+          // but still get rendered due to being within the bounds of another island
+          islandsFragments.push(island);
         }
       }
     }
   }
 
-  return islands;
+  return {
+    islands,
+    islandsFragments
+  };
 };
 
 export const drawIslands = (
@@ -145,6 +161,26 @@ export const drawIslands = (
         }
         ctx.fillRect(x, y, 1, 1);
       }
+    }
+  }
+}
+
+const doesIslandFragmentOverlap = (island: Island, fragment: Island): boolean => {
+  return !(island.minX > fragment.maxX || island.maxX < fragment.minX ||
+           island.minY > fragment.maxY || island.maxY < fragment.minY);
+};
+
+export const scrubIslandFragments = (
+  ctx: CanvasRenderingContext2D,
+  islands: Island[],
+  islandsFragments: Island[],
+) => {
+  for (const fragment of islandsFragments) {
+    const overlapping = islands.some(island => doesIslandFragmentOverlap(island, fragment));
+    if (overlapping) {
+      // start at the elevation point and fill outwards
+      ctx.fillStyle = constants.water;
+      
     }
   }
 }
