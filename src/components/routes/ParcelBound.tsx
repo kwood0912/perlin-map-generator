@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-import './App.css'
-import PerlinNoise from './classes/PerlinNoise';
-import * as constants from './constants';
-import { drawIslands, findIslands } from './utilities/islandUtils';
-import { ConfigForm } from './components/ConfigForm';
-import { downloadCanvasAsBinary } from './utilities/downloadUtils';
+import { useEffect, useRef, useState } from "react";
+import PerlinNoise from "../../classes/PerlinNoise";
+import * as constants from "../../constants";
+import { drawIslands, findIslands } from "../../utilities/islandUtils";
+import { ConfigForm } from "../ConfigForm";
+import { downloadCanvasAsBinary } from "../../utilities/downloadUtils";
 
-function App() {
+export default function ParcelBound() {
   const noiseGrid = useRef<number[][]>([]);
   const [seed, setSeed] = useState<string>('3nywolsp75h');
   const [mapSize, setMapSize] = useState<number>(2000);
@@ -99,5 +98,3 @@ function App() {
     </div>
   )
 }
-
-export default App
