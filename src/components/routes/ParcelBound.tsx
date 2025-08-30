@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import PerlinNoise from "../../classes/PerlinNoise";
-import * as constants from "../../constants";
-import { drawIslands, findIslands } from "../../utilities/islandUtils";
+import * as constants from "../../pbConstants";
+import { drawIslands, findIslands } from "../../utilities/parcelbound/islandUtils";
 import { ConfigForm } from "../ConfigForm";
-import { downloadCanvasAsBinary } from "../../utilities/downloadUtils";
+import { downloadCanvasAsBinary } from "../../utilities/parcelbound/downloadUtils";
 
 export default function ParcelBound() {
   const noiseGrid = useRef<number[][]>([]);
@@ -55,7 +55,8 @@ export default function ParcelBound() {
     <div className='container-fluid' style={{ height: '100vh', backgroundColor: 'tan' }}>
       <div className='row h-100'>
         <div className='col-2 h-100 pt-2' style={{ backgroundColor: 'beige', borderRight: '2px solid brown' }}>
-          <h2 className='text-center'>Island Generator</h2>
+          <h2 className='text-center'>Parcelbound</h2>
+          <p className="text-center">Island Generator Tool</p>
           <ConfigForm
             mapSize={mapSize}
             frequency={frequency}

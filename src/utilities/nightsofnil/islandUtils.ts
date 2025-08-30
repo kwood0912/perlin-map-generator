@@ -1,26 +1,13 @@
-import * as constants from '../constants';
+import * as constants from '../../nonConstants';
 
 const {
   WATER,
-  SHALLOW,
-  SHALLOWER,
-  SHALLOWEST,
   SAND,
-  LIGHT_GRASS,
   water,
-  shallow,
-  shallowest_sand,
-  shallowest_tundra,
-  shallower_sand,
-  shallower_tundra,
-  sand_warm,
-  sand_cool,
-  desert,
-  snow,
-  lightGrass_warm,
-  lightGrass_cool,
+  sand,
+  // desert,
   grass_warm,
-  grass_cool,
+  // grass_cool,
 } = constants;
 
 export type Island = {
@@ -109,53 +96,14 @@ export const drawIslands = (
   noiseGrid: number[][]
 ) => {
   for (const island of islands) {
-    const midY = Math.floor((island.minY + island.maxY) / 2);
     for (const [x, y] of island.pixels) {
       const c = noiseGrid[y][x];
       if (c < WATER) {
         ctx.fillStyle = water;
-      } else if (c <= SHALLOW) {
-        ctx.fillStyle = shallow;
-      } else if (c <= SHALLOWER) {
-        if (midY < 400 || midY > 1600) {
-          ctx.fillStyle = shallower_tundra;
-        } else {
-          ctx.fillStyle = shallower_sand;
-        }
-      } else if (c <= SHALLOWEST) {
-        if (midY < 400 || midY > 1600) {
-          ctx.fillStyle = shallowest_tundra;
-        } else {
-          ctx.fillStyle = shallowest_sand;
-        }
       } else if (c <= SAND) {
-        if (midY < 400 || midY > 1600) {
-          ctx.fillStyle = snow;
-        } else if (midY < 600 || midY > 1400) {
-          ctx.fillStyle = sand_cool;
-        } else {
-          ctx.fillStyle = sand_warm; // desert is same as warm sand
-        }
-      } else if (c <= LIGHT_GRASS) {
-        if (midY < 400 || midY > 1600) {
-          ctx.fillStyle = snow;
-        } else if (midY < 600 || midY > 1400) {
-          ctx.fillStyle = lightGrass_cool;
-        } else if (midY < 800 || midY > 1200) {
-          ctx.fillStyle = lightGrass_warm;
-        } else {
-          ctx.fillStyle = desert; // desert is same as warm sand
-        }
+        ctx.fillStyle = sand; 
       } else {
-        if (midY < 400 || midY > 1600) {
-          ctx.fillStyle = snow;
-        } else if (midY < 600 || midY > 1400) {
-          ctx.fillStyle = grass_cool;
-        } else if (midY < 800 || midY > 1200) {
-          ctx.fillStyle = grass_warm;
-        } else {
-          ctx.fillStyle = desert;
-        }
+        ctx.fillStyle = grass_warm;
       }
       ctx.fillRect(x, y, 1, 1);
     }
