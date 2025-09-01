@@ -52,7 +52,7 @@ export const findIslands = (grid: number[][], mapSize: number) => {
         continue;
       }
       visited.add(`${x},${y}`);
-      if (grid[y][x] >= WATER) {
+      if (grid[y][x] > WATER) {
         pixels.push([x, y]);
         minX = Math.min(minX, x);
         minY = Math.min(minY, y);
@@ -79,9 +79,6 @@ export const findIslands = (grid: number[][], mapSize: number) => {
         // only consider islands within the bounds of the canvas
         if (isIslandWithinMargin(island, mapSize)) {
           islands.push(island);
-        } else {
-          // use nearest neighbor to remove any island fragments that are too close to the edge
-          // but still get rendered due to being within the bounds of another island
         }
       }
     }
@@ -93,19 +90,25 @@ export const findIslands = (grid: number[][], mapSize: number) => {
 export const drawIslands = (
   ctx: CanvasRenderingContext2D,
   islands: Island[],
-  noiseGrid: number[][]
+  noiseGrid: number[][],
+  mapSize: number,
 ) => {
+  const finalNoise: number[][] = Array.from({ length: mapSize }, () => Array(mapSize).fill(0));
   for (const island of islands) {
     for (const [x, y] of island.pixels) {
       const c = noiseGrid[y][x];
-      if (c < WATER) {
+      if (c <= WATER) {
         ctx.fillStyle = water;
       } else if (c <= SAND) {
-        ctx.fillStyle = sand; 
+        ctx.fillStyle = sand;
+        finalNoise[y][x] = c;
       } else {
         ctx.fillStyle = grass_warm;
+        finalNoise[y][x] = c;
       }
       ctx.fillRect(x, y, 1, 1);
     }
   }
-}
+
+  return finalNoise;
+};

@@ -1,3 +1,4 @@
+export const MAP_DIMENSION = 1000;
 export const WATER = 68;
 export const SAND = WATER + 2;
 export const LAND = SAND + 2;

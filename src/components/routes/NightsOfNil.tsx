@@ -4,12 +4,14 @@ import * as constants from "../../pbConstants";
 import { drawIslands, findIslands } from "../../utilities/nightsofnil/islandUtils";
 import { generateBinaryFile } from "../../utilities/nightsofnil/downloadUtils";
 import { ConfigForm } from "../ConfigForm";
+import { MAP_DIMENSION } from "../../nonConstants";
 
 
 export default function NightsOfNil() {
   const noiseGrid = useRef<number[][]>([]);
+  const finalNoise = useRef<number[][]>([]);
   const [seed, setSeed] = useState<string>('3nywolsp75h');
-  const [mapSize, setMapSize] = useState<number>(600);
+  const [mapSize, setMapSize] = useState<number>(MAP_DIMENSION);
   const [frequency, setFrequency] = useState<number>(9);
   const [perlin, setPerlin] = useState<PerlinNoise>(new PerlinNoise(seed));
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
@@ -41,15 +43,15 @@ export default function NightsOfNil() {
           const p = perlin.get(x, y);
           let c = Math.round(p * 100);
           c += 50;
-          c = Math.max(0, Math.min(c, 100));
+          c = Math.max(0, Math.min(c, 100)); // clamp to [0, 100]
           noiseGrid.current[py][px] = c;
           px++;
         }
         px = 0;
         py++;
       }
-       const islands = findIslands(noiseGrid.current, mapSize);
-       drawIslands(context, islands, noiseGrid.current);
+      const islands = findIslands(noiseGrid.current, mapSize);
+      finalNoise.current = drawIslands(context, islands, noiseGrid.current, mapSize);
     }
   }, [context, mapSize, frequency, perlin]);
 
@@ -76,7 +78,7 @@ export default function NightsOfNil() {
               className='btn btn-info d-block w-100'
               onClick={() => {
                 if (context) {
-                  generateBinaryFile(noiseGrid.current, 'world.bin');
+                  generateBinaryFile(finalNoise.current, 'world.bin');
                 }
               }}
             >
