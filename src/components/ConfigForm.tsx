@@ -33,8 +33,16 @@ export const ConfigForm = (config: ConfigFormProps) => {
     console.log(`New seed: ${newSeed}`);
   };
 
+  const onSubmit = (data: { mapSize: number; frequency: number; seed: string }) => {
+    config.onSubmit({
+      mapSize: Number(data.mapSize),
+      frequency: Number(data.frequency),
+      seed: data.seed,
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit(config.onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-3">
         <label htmlFor="mapSizeInput" className="form-label">Map Size</label>
         <input type="number" className="form-control" id="mapSizeInput" placeholder="2000" {...register("mapSize")} />

@@ -14,7 +14,6 @@ export default function NightsOfNil() {
     mapSize: number,
     frequency: number
   ) => {
-    mapSize = Number(mapSize);
     const ctx = configureCanvas(mapSize);
     if (ctx) {
       const perlin = new PerlinNoise(seed);
