@@ -1,6 +1,7 @@
 export const generateBinaryFile = (noiseGrid: number[][], fileName = "world.bin") => {
   const rows = noiseGrid.length;
   const cols = noiseGrid[0].length;
+  console.log(`generating binary file of size ${rows}x${cols} bytes`);
   const buffer = new ArrayBuffer(rows * cols);
   const view = new DataView(buffer);
 

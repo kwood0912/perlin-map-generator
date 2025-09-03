@@ -7,7 +7,6 @@ class PerlinNoise {
 
   constructor(_seed?: string) {
     this.seed = _seed ?? Math.random().toString(36).substring(2, 15);
-    console.log(`PerlinNoise seed: ${this.seed}`);
     this.gradients = {};
     this.rand = new Rand(this.seed);
   }

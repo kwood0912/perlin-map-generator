@@ -1,37 +1,26 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import PerlinNoise from "../../classes/PerlinNoise";
 import * as constants from "../../pbConstants";
 import { drawIslands, findIslands } from "../../utilities/nightsofnil/islandUtils";
 import { generateBinaryFile } from "../../utilities/nightsofnil/downloadUtils";
 import { ConfigForm } from "../ConfigForm";
-import { MAP_DIMENSION } from "../../nonConstants";
-
 
 export default function NightsOfNil() {
   const noiseGrid = useRef<number[][]>([]);
   const finalNoise = useRef<number[][]>([]);
-  const [seed, setSeed] = useState<string>('3nywolsp75h');
-  const [mapSize, setMapSize] = useState<number>(MAP_DIMENSION);
-  const [frequency, setFrequency] = useState<number>(9);
-  const [perlin, setPerlin] = useState<PerlinNoise>(new PerlinNoise(seed));
-  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  useEffect(() => {
-    const cnvs = document.getElementById('cnvs') as HTMLCanvasElement;  
-    if (cnvs) {
-      cnvs.width = mapSize;
-      cnvs.height = mapSize;
-      const ctx = cnvs.getContext('2d');
-      if (ctx) {
-        setContext(ctx);
-      }
-    }
-    setPerlin(new PerlinNoise(seed));
-  }, [mapSize, seed]);
 
-  useEffect(() => {
-    if (context) {
-      context.fillStyle = constants.water;
-      context.fillRect(0, 0, mapSize, mapSize);
+  const generateWorld = (
+    seed: string,
+    mapSize: number,
+    frequency: number
+  ) => {
+    mapSize = Number(mapSize);
+    const ctx = configureCanvas(mapSize);
+    if (ctx) {
+      const perlin = new PerlinNoise(seed);
+      console.log(`Generating world with seed ${seed}, mapSize ${mapSize}, frequency ${frequency}`);
+      ctx.fillStyle = constants.water;
+      ctx.fillRect(0, 0, mapSize, mapSize);
       const resolution = mapSize / frequency;
       const numPixels = frequency / resolution;
       let px = 0;
@@ -51,9 +40,21 @@ export default function NightsOfNil() {
         py++;
       }
       const islands = findIslands(noiseGrid.current, mapSize);
-      finalNoise.current = drawIslands(context, islands, noiseGrid.current, mapSize);
+      finalNoise.current = drawIslands(ctx, islands, noiseGrid.current, mapSize);
     }
-  }, [context, mapSize, frequency, perlin]);
+  };
+
+  const configureCanvas = (mapSize: number) => {
+    const cnvs = document.getElementById('cnvs') as HTMLCanvasElement;
+    let ctx: CanvasRenderingContext2D | null = null;
+    if (cnvs) {
+      cnvs.width = mapSize;
+      cnvs.height = mapSize;
+      ctx = cnvs.getContext('2d');
+      console.log(`Configured canvas context`);
+    }
+    return ctx;
+  };
 
   return (
     <div className='container-fluid' style={{ height: '100vh', backgroundColor: 'tan' }}>
@@ -62,24 +63,16 @@ export default function NightsOfNil() {
           <h2 className='text-center'>Nights of Nil</h2>
           <p className="text-center">Island Generator Tool</p>
           <ConfigForm
-            mapSize={mapSize}
-            frequency={frequency}
-            seed={seed}
             onSubmit={(config) => {
-              setSeed(config.seed);
-              setMapSize(config.mapSize);
-              setFrequency(config.frequency);
-              setPerlin(new PerlinNoise(config.seed));
-              console.log(`New seed: ${config.seed}`);
+              console.log(`submitted form ${JSON.stringify(config, null, 2)}`);
+              generateWorld(config.seed, config.mapSize, config.frequency);
             }}
           />
           <div className='mt-3'>
             <button
               className='btn btn-info d-block w-100'
               onClick={() => {
-                if (context) {
-                  generateBinaryFile(finalNoise.current, 'world.bin');
-                }
+                generateBinaryFile(finalNoise.current, 'world.bin');
               }}
             >
               Download Binary

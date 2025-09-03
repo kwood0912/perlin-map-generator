@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 
 type ConfigFormProps = {
-  mapSize: number;
-  frequency: number;
-  seed: string;
+  mapSize?: number;
+  frequency?: number;
+  seed?: string;
   onSubmit: (config: { mapSize: number; frequency: number; seed: string }) => void;
 };
 
@@ -12,22 +12,24 @@ export const ConfigForm = (config: ConfigFormProps) => {
     register,
     handleSubmit,
     setValue,
+    getValues,
   } = useForm<{
     mapSize: number;
     frequency: number;
     seed: string;
   }>({
     defaultValues: {
-      mapSize: config.mapSize,
-      frequency: config.frequency,
-      seed: config.seed,
+      mapSize: 600,
+      frequency: 9,
+      seed: '3nywolsp75h',
     },
   });
 
   const handleNewSeed = () => {
     const newSeed = Math.random().toString(36).substring(2, 15);
     setValue("seed", newSeed);
-    config.onSubmit({ ...config, seed: newSeed });
+    const data = getValues();
+    config.onSubmit({ ...data, seed: newSeed });
     console.log(`New seed: ${newSeed}`);
   };
 

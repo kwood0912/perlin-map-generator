@@ -24,6 +24,8 @@ export type Island = {
 const isIslandWithinMargin = (island: Island, mapSize: number): boolean => {
   if (island.minX < 1 || island.minY < 1 || island.maxX >= mapSize - 1 || island.maxY >= mapSize - 1) {
     return false;
+  } else if (island.minX == Infinity || island.minY == Infinity || island.maxX == -Infinity || island.maxY == -Infinity) {
+    return false;
   }
   return true;
 }
@@ -78,6 +80,7 @@ export const findIslands = (grid: number[][], mapSize: number) => {
         const island = getIslandBoundsAndElevation(x, y);
         // only consider islands within the bounds of the canvas
         if (isIslandWithinMargin(island, mapSize)) {
+          console.log(`Found island at (${island.minX},${island.minY}) to (${island.maxX},${island.maxY}) with elevation ${island.elevation} at (${island.elevationX},${island.elevationY}), size ${island.pixels.length}`);
           islands.push(island);
         }
       }
@@ -93,7 +96,13 @@ export const drawIslands = (
   noiseGrid: number[][],
   mapSize: number,
 ) => {
-  const finalNoise: number[][] = Array.from({ length: mapSize }, () => Array(mapSize).fill(0));
+  // create a mapSize x mapSize 2d array initialized to 0
+  console.log('mapSize:', mapSize, typeof mapSize);
+  const finalNoise = Array.from({ length: mapSize }, () => (new Array(mapSize)).fill(0));
+  const dt = finalNoise.reduce((acc, row) => acc + row.join(',') + '\n', '');
+  console.log(dt);
+  console.log('mapSize:', mapSize);
+  console.log(`Drawing ${islands.length} islands`);
   for (const island of islands) {
     for (const [x, y] of island.pixels) {
       const c = noiseGrid[y][x];
@@ -109,6 +118,5 @@ export const drawIslands = (
       ctx.fillRect(x, y, 1, 1);
     }
   }
-
   return finalNoise;
 };
