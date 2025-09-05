@@ -21,22 +21,17 @@ export default function NightsOfNil() {
       ctx.fillStyle = constants.water;
       ctx.fillRect(0, 0, mapSize, mapSize);
       const resolution = mapSize / frequency;
-      const numPixels = frequency / resolution;
-      let px = 0;
-      let py = 0;
+      // const numPixels = frequency / resolution;
 
-      for (let y = 0; y < frequency; y += numPixels / frequency) {
-        noiseGrid.current[py] = [];
-        for (let x = 0; x < frequency; x += numPixels / frequency) {
-          const p = perlin.get(x, y);
+      for (let y = 0; y < mapSize; y++) {
+        noiseGrid.current[y] = [];
+        for (let x = 0; x < mapSize; x++) {
+          const p = perlin.get(x / resolution, y / resolution);
           let c = Math.round(p * 100);
           c += 50;
           c = Math.max(0, Math.min(c, 100)); // clamp to [0, 100]
-          noiseGrid.current[py][px] = c;
-          px++;
+          noiseGrid.current[y][x] = c;
         }
-        px = 0;
-        py++;
       }
       const islands = findIslands(noiseGrid.current, mapSize);
       finalNoise.current = drawIslands(ctx, islands, noiseGrid.current, mapSize);
